@@ -1,2 +1,10 @@
 *.sublime-*
 *.pyc
+csv/
+plots/
+trap_integral.py
+correlation_test.py
+very_negative_correlations.txt
+almost_correct.txt
+correct_correlations.txt
+__pycache__/
