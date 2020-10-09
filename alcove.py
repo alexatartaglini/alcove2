@@ -415,6 +415,7 @@ def df_to_integral(df, track_inc):
 	
 	if path.isfile(integral_dir):
 		with open(integral_dir, 'a') as csv:
+			csv.write('\n')
 			integrals.to_csv(csv, header=False)
 	else:
 		integrals.to_csv(integral_dir)
@@ -492,6 +493,7 @@ def df_to_correlation(df):
 		
 	if path.isfile(corr_dir):
 		with open(corr_dir, 'a') as csv:
+			csv.write('\n')
 			correlations.to_csv(csv, header=False)
 	else:
 		correlations.to_csv(corr_dir)		
@@ -558,6 +560,7 @@ def run_simulation(model_type,image_set,net_type,loss_type,num_epochs,lr_associa
 	else:      
 		if(path.isfile(file_dir + '.csv')):
 			with open(file_dir + '.csv', 'a', newline='\n') as csv:
+				csv.write('\n')
 				df.to_csv(csv, header=False)
 		else:
 			df.to_csv(file_dir + '.csv')
