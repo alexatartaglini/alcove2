@@ -1,0 +1,12 @@
+p {
+    margin: 0;
+}
+
+.figure-img {
+    margin-bottom: -1rem;
+}
+
+.figure-caption {
+    padding-top: 0px;
+    color: black;
+}

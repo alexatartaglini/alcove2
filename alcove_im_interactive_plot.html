@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="bootstrap-custom.css">
+    <title>ALCOVE Interactive Plot</title>
+  </head>
+  <body>
+    <div class="container">
+      <br />
+      <h4>ALCOVE - Image Simulations</h4>
+      <br />
+      <div class="row">
+        <div class="col-6">
+          <figcaption class="figure-caption text-center"><strong>VGG-11</strong></figcaption>
+          <figure class="figure">
+            <img src="img/alcove-vgg11-mse-shj_images_set1-0.0023-0.02-6.0-1.5.svg" class="figure-img img-fluid" id="model-fig-vgg-11">
+          </figure>
+        </div>        
+        <div class="col-6">
+          <figcaption class="figure-caption text-center"><strong>ResNet-18</strong></figcaption>
+          <figure class="figure">
+            <img src="img/alcove-resnet18-mse-shj_images_set1-0.0023-0.02-6.0-1.5.svg" class="figure-img img-fluid" id="model-fig-resnet-18">
+          </figure>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-6">
+          <figcaption class="figure-caption text-center"><strong>ResNet-152</strong></figcaption>
+          <figure class="figure">
+            <img src="img/alcove-resnet152-mse-shj_images_set1-0.0023-0.02-6.0-1.5.svg" class="figure-img img-fluid" id="model-fig-resnet-152">
+          </figure>
+        </div>
+        <div class="col-6">
+          <figcaption class="figure-caption text-center"><strong>Human</strong></figcaption>
+          <figure class="figure">
+            <img src="img/human.svg" class="figure-img img-fluid">
+          </figure>
+        </div>
+      </div>
+      <br />
+
+      <div class="row">
+        <div class="col-6">
+          <h4>Model Configuration</h4>
+          <!-- <p><strong>Net</strong></p> -->
+          <!-- <select class="custom-select" id="net-select"> -->
+          <!--   <option value="vgg11">VGG-11</option> -->
+          <!--   <option value="resnet18">ResNet-18</option> -->
+          <!--   <option value="resnet152">ResNet-152</option> -->
+          <!-- </select> -->
+
+          <p><strong>Loss Type</strong></p>
+          <select class="custom-select" id="loss-select">
+            <option value="mse">Mean Squared Error</option>
+            <option value="ll">Log-Likelihood</option>
+            <option value="hinge">Hinge</option>
+            <option value="humble">Humble Teacher</option>
+          </select>
+
+          <p><strong>Image Set</strong></p>
+          <select class="custom-select" id="image-set-select">
+            <option value="shj_images_set1">Image Set 1</option>
+            <option value="shj_images_set2">Image Set 2</option>
+            <option value="shj_images_set3">Image Set 3</option>
+          </select>
+        </div>
+
+        <div class="col-6">
+          <h4>Hyperparameters</h4>
+          <p><strong>LR - Attention</strong></p>
+          <select class="custom-select" id="lr-attention-select">
+            <option value="0.0023">0.0023</option>
+            <option value="0.0033">0.0033</option>
+            <option value="0.0043">0.0043</option>
+          </select>
+
+          <p><strong>LR - Association</strong></p>
+          <select class="custom-select" id="lr-assoc-select">
+            <option value="0.02">0.02</option>
+            <option value="0.03">0.03</option>
+            <option value="0.04">0.04</option>
+          </select>
+          
+          <p><strong>c</strong></p>
+          <select class="custom-select" id="c-select">
+            <option value="6.0">6.0</option>
+            <option value="6.5">6.5</option>
+            <option value="7.0">7.0</option>
+          </select>
+
+          <p><strong>phi</strong></p>
+          <select class="custom-select" id="phi-select">
+            <option value="1.5">1.5</option>
+            <option value="2.5">2.5</option>
+          </select>
+        </div>
+      </div>
+        
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    
+    <script src="alcove_im_interactive_plot.js"></script>
+  </body>
+</html>
