@@ -12,7 +12,6 @@ import pandas as pd
 import argparse
 import scipy.stats
 
-
 #
 # PyTorch implementation of
 #  	ALCOVE: An exemplar-based connectionist model of category learning (Kruschke, 1992)
@@ -137,7 +136,7 @@ def update_single(net, exemplars, targets, loss, optimizer):
 		net.train()
 	
 		out[j],_ = net.forward(exemplars[j])
-		myloss = loss(out[j], targets[j])
+		myloss = loss(out[j], targets[j]).clone()
 		myloss.backward(retain_graph=True)
 		optimizer.step()
 		current_loss[j] = myloss.cpu().item()
@@ -243,6 +242,7 @@ def train(exemplars,labels,num_epochs,loss_type,typenum,c,phi,df,track_inc=5,ver
 			v_acc.append(test_acc)
 			v_prob.append(test_prob)
 			print('  epoch ' + str(epoch) + "; train loss " + str(round(v_loss[-1],4)))
+
 			if(track_inc == 1):
 				df.at[(epoch//track_inc+type_tracker)-1, 'Train Loss'] = round(v_loss[-1],4)
 				df.at[(epoch//track_inc+type_tracker)-1, 'Train Accuracy'] = round(v_acc[-1],4)
@@ -285,6 +285,7 @@ def initialize_df(track_inc,num_rows,list_exemplars,args):
 
 def create_dir(model_type,image_set,net_type,loss_type,_num_epochs,plot):
 	# Creates directory and file names for plot/csv storage
+
 	if(image_set == 'abstract'):
 		d = 'ab'
 		sub_subdir_name = ''
@@ -611,6 +612,7 @@ if __name__ == "__main__":
 		pass
 
 	print(f'config: {model_type}, {image_set}, {net_type}, {loss_type} loss, {num_epochs} epochs')
+
 
 	# run simulation
 	if(model_type == 'alcove' and image_set != 'abstract'): # data type = images, model = alcove
