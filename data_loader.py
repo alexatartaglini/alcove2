@@ -161,3 +161,48 @@ def load_shj_images(loss_type, net_type, im_dir, perm=[0,1,2], viz_cats=False):
 		plt.show()
 
 	return X,y_list
+
+def load_shj_PCA(loss_type, net_type, im_dir):
+	fn_PCA = 'data/PCA/PCA_' + net_type + '_' + im_dir[11:] + '.txt'
+	stimuli = pd.read_csv(fn_PCA, header=None).to_numpy()
+	labels = pd.read_csv(fn_shj_labels, header=None).to_numpy()
+	stimuli = stimuli.astype(float)
+	ntype = labels.shape[0]
+	POSITIVE,NEGATIVE = get_label_coding(loss_type)
+	labels_float = np.zeros(labels.shape,dtype=float)
+	labels_float[labels == 'A'] = POSITIVE
+	labels_float[labels == 'B'] = NEGATIVE
+	X = torch.tensor(stimuli).float()
+	y_list = []
+	for mytype in range(ntype):
+		y = labels_float[mytype,:].flatten()
+		y = torch.tensor(y).float()
+		y_list.append(y)
+	return X,y_list
+
+
+def load_shj_abstract_PCA(loss_type, net_type, im_dir, perm=[0, 1, 2]):
+	# Loads SHJ data in abstract form
+	#
+	# Input
+	#   loss_type : either ll or hinge loss
+	#   perm : permutation of abstract feature indices
+	#
+	# Output
+	#   X : [ne x dim tensor] stimuli as rows
+	#   y_list : list of [ne tensor] labels, with a list element for each shj type
+
+	# load image and abstract data
+	X, y_list = load_shj_PCA(loss_type, net_type, im_dir)
+	X_abstract = X.data.numpy().astype(int)
+
+	# Apply permutation
+	X_perm = X_abstract.copy()
+	X_perm = X_perm[:, perm]  # permuted features
+	perm_idx = []
+	for x in X_perm:
+		idx = np.where((X_abstract == x).all(axis=1))[0]  # get item mapping from original order to perm order
+		perm_idx.append(idx[0])
+	perm_idx = np.array(perm_idx)
+	X = X[perm_idx, :]  # permute items from original order to permuted order
+	return X, y_list

@@ -4,7 +4,7 @@ import torch.optim as optim
 import numpy as np
 import matplotlib.pyplot as plt    
 from itertools import permutations
-from data_loader import get_label_coding,load_shj_abstract,load_shj_images
+from data_loader import get_label_coding,load_shj_abstract,load_shj_images,load_shj_abstract_PCA
 from scipy.stats import sem
 from os import mkdir, path
 import os
@@ -136,7 +136,7 @@ def update_single(net, exemplars, targets, loss, optimizer):
 		net.train()
 	
 		out[j],_ = net.forward(exemplars[j])
-		myloss = loss(out[j], targets[j]).clone()
+		myloss = loss(out[j], targets[j])
 		myloss.backward(retain_graph=True)
 		optimizer.step()
 		current_loss[j] = myloss.cpu().item()
@@ -289,6 +289,9 @@ def create_dir(model_type,image_set,net_type,loss_type,_num_epochs,plot):
 	if(image_set == 'abstract'):
 		d = 'ab'
 		sub_subdir_name = ''
+	elif(image_set == 'PCA_abstract'):
+		d = 'ab_PCA'
+		sub_subdir_name = f'/{image_set}'
 	else:
 		d = 'im'
 		sub_subdir_name = f'/{image_set}'
@@ -519,6 +522,9 @@ def run_simulation(model_type,image_set,net_type,loss_type,num_epochs,lr_associa
 	for p in list_perms:
 		if(image_set == 'abstract'):
 			exemplars,labels_by_type = load_shj_abstract(loss_type,p)
+		elif(image_set == 'PCA_abstract'):
+			im_dir = 'shj_images_set1'
+			exemplars,labels_by_type = load_shj_abstract_PCA(loss_type,net_type,im_dir,p)
 		else:
 			exemplars,labels_by_type = load_shj_images(loss_type,net_type,im_dir,p)
 		# [n_exemplars x dim tensor],list of [n_exemplars tensor]
@@ -550,7 +556,7 @@ def run_simulation(model_type,image_set,net_type,loss_type,num_epochs,lr_associa
 		perm_tracker += num_rows_p
 		
 	# create directories/filenames for plots/.csv files and title for plots	
-	if(image_set == 'abstract'):		
+	if(image_set == 'abstract'):
 		file_dir,title = create_dir(model_type,image_set,'',loss_type,num_epochs,plot)
 	else:
 		file_dir,title = create_dir(model_type,image_set,net_type+'_',loss_type,num_epochs,plot)
