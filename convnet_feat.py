@@ -66,47 +66,50 @@ def get_features(data_dir,model_type):
 
     #global model_string
     #model_string = model_type
-		
+
     # Process the input data
     #image_dataset = datasets.ImageFolder(data_dir,T)
-	image_dataset = datasets.ImageFolder(data_dir,T)    
-	class_names = image_dataset.classes
-	dataset_size = len(image_dataset)
-	dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=dataset_size, shuffle=False, num_workers=1)
+    image_dataset = datasets.ImageFolder(data_dir,T)
+    class_names = image_dataset.classes
+    dataset_size = len(image_dataset)
+    dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=dataset_size, shuffle=False, num_workers=1)
 
     # Get a batch of data, which should hold whole dataset
-	inputs, labels = next(iter(dataloader))
-	if use_gpu:
-		inputs = inputs.cuda()
-		labels = labels.cuda()
+    inputs, labels = next(iter(dataloader))
+    if use_gpu:
+        inputs = inputs.cuda()
+        labels = labels.cuda()
 
     # Load the model and replace layers with identity function to extract the right outputs
     # in each case, we are grabbing the top convolutional layer..
-	if model_type == 'resnet18':
-		model = torchvision.models.resnet18(pretrained=True)
+    if model_type == 'resnet18':
+        model = torchvision.models.resnet18(pretrained=True)
         # if before_maxpool:
         #     model.avgpool = Identity()
-		model.fc = Identity()
-	elif model_type == 'resnet152':
-		model = torchvision.models.resnet152(pretrained=True)
+        model.fc = Identity()
+    elif model_type == 'resnet152':
+        model = torchvision.models.resnet152(pretrained=True)
         # if before_maxpool:
         #     model.avgpool = Identity()
-		model.fc = Identity()    
-	elif model_type == 'vgg11':
-		model = torchvision.models.vgg11(pretrained=True)
-		model.classifier = Identity() # keep just the top conv layer
-	elif model_type == 'vgg11_fc':
-		model = torchvision.models.vgg11(pretrained=True)
-		model.classifier = torch.nn.Sequential(*list(model.classifier.children())[:2])
-	else:
-		assert False
-	if use_gpu:
-		model = model.cuda()
+        model.fc = Identity()
+    elif model_type == 'resnet50':
+        model = torchvision.models.resnet50(pretrained=True)
+        model.fc = Identity()
+    elif model_type == 'vgg11_fc':
+        model = torchvision.models.vgg16(pretrained=True)
+        model.classifier = torch.nn.Sequential(*list(model.classifier.children())[:2])
+    elif model_type == 'vgg16':
+        model = torchvision.models.vgg16(pretrained=True)
+        model.classifier = torch.nn.Sequential(*list(model.classifier.children())[:2])
+    else:
+        assert False
+    if use_gpu:
+        model = model.cuda()
 
     # forward pass
-	model.eval()
-	outputs = model(inputs)
-	return outputs, inputs
+    model.eval()
+    outputs = model(inputs)
+    return outputs, inputs
 
 def similarity_gradient(data_dir,model_type,idx_sel=0,dist_type='euclidean'):
     # Input
