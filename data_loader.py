@@ -193,8 +193,9 @@ def load_shj_abstract_PCA(loss_type, net_type, im_dir, perm=[0, 1, 2]):
 	#   y_list : list of [ne tensor] labels, with a list element for each shj type
 
 	# load image and abstract data
-	X, y_list = load_shj_PCA(loss_type, net_type, im_dir)
-	X_abstract = X.data.numpy().astype(int)
+	X,PCA = load_shj_PCA(loss_type, net_type, im_dir)
+	X_abstract,y_list = load_shj(loss_type)
+	X_abstract = X_abstract.data.numpy().astype(int)
 
 	# Apply permutation
 	X_perm = X_abstract.copy()
@@ -205,4 +206,6 @@ def load_shj_abstract_PCA(loss_type, net_type, im_dir, perm=[0, 1, 2]):
 		perm_idx.append(idx[0])
 	perm_idx = np.array(perm_idx)
 	X = X[perm_idx, :]  # permute items from original order to permuted order
-	return X, y_list
+	#PCA = PCA[perm_idx]  # permute items from original order to permuted order
+
+	return X,y_list

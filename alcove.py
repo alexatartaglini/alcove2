@@ -234,14 +234,14 @@ def train(exemplars,labels,num_epochs,loss_type,typenum,c,phi,df,track_inc=5,ver
 	for epoch in range(1,num_epochs+1):
 		#loss_epoch = update_batch(net,exemplars,labels,loss,optimizer)
 		loss_epoch = update_single(net,exemplars,labels,loss,optimizer)
-		print(loss_epoch)
+		#print(loss_epoch)
 		if epoch == 1 or epoch % track_inc == 0:
 			test_prob,test_acc = evaluate(net,exemplars,labels)
 			v_epoch.append(epoch)
 			v_loss.append(loss_epoch / float(n_exemplars))
 			v_acc.append(test_acc)
 			v_prob.append(test_prob)
-			print('  epoch ' + str(epoch) + "; train loss " + str(round(v_loss[-1],4)))
+			#print('  epoch ' + str(epoch) + "; train loss " + str(round(v_loss[-1],4)))
 
 			if(track_inc == 1):
 				df.at[(epoch//track_inc+type_tracker)-1, 'Train Loss'] = round(v_loss[-1],4)
@@ -541,16 +541,16 @@ def run_simulation(model_type,image_set,net_type,loss_type,num_epochs,lr_associa
 	list_trackers = []
 	for pidx,exemplars in enumerate(list_exemplars): # all permutations of stimulus dimensions
 		tracker = []
-		print('Permutation ' + str(pidx))
+		#print('Permutation ' + str(pidx))
 		df.at[perm_tracker:perm_tracker+num_rows_p,'Permutation'] = pidx
 		for mytype in range(1,ntype+1): # from type I to type VI
-			print('  Training on type ' + str(mytype))
+			#print('  Training on type ' + str(mytype))
 			df.at[type_tracker:type_tracker+num_rows,'Type'] = mytype
 			df.at[type_tracker:type_tracker+num_rows,'Max Epochs'] = num_epochs
 			labels = labels_by_type[mytype-1]
 			v_epoch,v_prob,v_acc,v_loss = train(exemplars,labels,num_epochs,loss_type,mytype,c,phi,df,track_inc)
 			tracker.append((v_epoch,v_prob,v_acc,v_loss))
-			print("")
+			#print("")
 			type_tracker += num_rows
 		list_trackers.append(tracker)
 		perm_tracker += num_rows_p
