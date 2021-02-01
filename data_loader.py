@@ -19,7 +19,7 @@ def get_label_coding(loss_type):
     POSITIVE = 1.
     if loss_type == 'hinge':
         NEGATIVE = -1.
-    elif loss_type == 'll':
+    elif loss_type == 'loglik':
         NEGATIVE = 0.
     elif loss_type == 'mse':
         NEGATIVE = 0.
@@ -64,21 +64,19 @@ def process_shj_images(net_type, im_dir):
     pickle_dir_im = 'pickle/' + net_type + '_' + im_dir[5:] + 'im.pickle'
 
     if(path.exists(pickle_dir_stim) and path.exists(pickle_dir_im)):
-        print(" Retrieving saved features...")
         infile = open(pickle_dir_stim, 'rb')
         stimuli = pickle.load(infile)
         infile.close()
 
-        print(" Retrieving saved raw images...")
         infile = open(pickle_dir_im, 'rb')
         images = pickle.load(infile)
         infile.close()
     else:
-        print(" Passing SHJ images through ConvNet...")
+        print("Passing SHJ images through ConvNet...")
         # stimuli,images = get_features(mydir,'vgg11')
         stimuli, images = get_features(im_dir, net_type)
 
-        print(" Done.")
+        print("Done.")
 
         stimuli = stimuli.cpu().data.numpy().astype(float)
         images = images.cpu().data.numpy()
@@ -191,35 +189,6 @@ def load_shj_PCA(loss_type, net_type, im_dir):
 
 
 def load_shj_abstract_PCA(loss_type, net_type, im_dir, perm=[0, 1, 2]):
-<<<<<<< HEAD
-	# Loads SHJ data in abstract form
-	#
-	# Input
-	#   loss_type : either ll or hinge loss
-	#   perm : permutation of abstract feature indices
-	#
-	# Output
-	#   X : [ne x dim tensor] stimuli as rows
-	#   y_list : list of [ne tensor] labels, with a list element for each shj type
-
-	# load image and abstract data
-	X,PCA = load_shj_PCA(loss_type, net_type, im_dir)
-	X_abstract,y_list = load_shj(loss_type)
-	X_abstract = X_abstract.data.numpy().astype(int)
-
-	# Apply permutation
-	X_perm = X_abstract.copy()
-	X_perm = X_perm[:, perm]  # permuted features
-	perm_idx = []
-	for x in X_perm:
-		idx = np.where((X_abstract == x).all(axis=1))[0]  # get item mapping from original order to perm order
-		perm_idx.append(idx[0])
-	perm_idx = np.array(perm_idx)
-	X = X[perm_idx, :]  # permute items from original order to permuted order
-	#PCA = PCA[perm_idx]  # permute items from original order to permuted order
-
-	return X,y_list
-=======
     # Loads SHJ data in abstract form
     #
     # Input
@@ -246,4 +215,3 @@ def load_shj_abstract_PCA(loss_type, net_type, im_dir, perm=[0, 1, 2]):
     perm_idx = np.array(perm_idx)
     X = X[perm_idx, :]  # permute items from original order to permuted order
     return X, y_list
->>>>>>> 8d4a1d0f5b8f37c13fd7c06f2feb044cb983bebe
