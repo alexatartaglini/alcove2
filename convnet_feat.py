@@ -100,7 +100,7 @@ def get_features(data_dir,model_type):
         model.classifier = torch.nn.Sequential(*list(model.classifier.children())[:2])
     elif model_type == 'vgg16':
         model = torchvision.models.vgg16(pretrained=True)
-        model.classifier = torch.nn.Sequential(*list(model.classifier.children())[:2])
+        model.classifier = torch.nn.Sequential(*list(model.classifier.children())[:-1])
     else:
         assert False
     if use_gpu:
